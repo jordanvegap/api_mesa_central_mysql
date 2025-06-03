@@ -222,64 +222,53 @@ exports.GetInfoEmpresa = async (req, res) => {
 
 exports.LoginSistema = async (req, res) => {
     try {
-        let ret_psw = null;
-        request.post({
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            url: 'https://cdn.dnasystem.io/fn/encode.php',
-            body: "pswd=" + req.query.USU_PASSWORD
-        }, function (err, response, body) {
-            if (response.statusCode == 404) { result(response.statusCode, null); } else {
-                let query = null;
-                var __Request_Pool = dbConfig.Get_Db_conexion(req.query.EMP_CLV_EMPRESA, req.query.Type);
-                var inputData = [
-                    req.query.USU_LOGIN,
-                    body,
-                    req.query.EMP_CSC_EMPRESA_HOST
-                ];
+        const passwordPlano = req.query.USU_PASSWORD;
+        const login = req.query.USU_LOGIN;
+        const host = req.query.EMP_CSC_EMPRESA_HOST;
 
-                query = "SELECT EMP_CSC_EMPRESA_HOST,USU_CSC_USUARIO,EMPLEADO_CSC_EMPLEADO,USU_INDICAACTIVO,USU_CSCSYSUSER,USU_LOGIN,USU_CODESQUEMASEG,USU_FECHA_EXPIRA,USU_AUTENTIFICA_REMOTO,NEWID,USU_ACCESO_SITEMA,USU_FECHA_EXPIRA_LOGIN FROM SAMT_USUARIO WHERE USU_LOGIN = ? AND USU_PASSWORD= ? AND EMP_CSC_EMPRESA_HOST= ? AND USU_INDICAACTIVO = 1;";
+        const __Request_Pool = dbConfig.Get_Db_conexion(req.query.EMP_CLV_EMPRESA, req.query.Type);
+        const inputData = [login, passwordPlano, host];
 
-                __Request_Pool.query(query, inputData, function (error, resultReturn, fields) {
-                    if (error) {
-                        ResultData = { success: false, message: error.message };
-                        res.status(400);
-                        res.send(ResultData);
-                        console.log(ResultData);
-                        let DataErr = {
-                            Fecha: GetDate(),
-                            Detalle: error
-                        }
-                        console.log(DataErr);
-                    }
-                    else {
-                        if (resultReturn.length === 0) {
-                            ResultData = { success: false, message: 'No Data Get' };
-                            res.status(200);
-                            res.send(ResultData);
-                        } else {
-                            // const usuario = {
-                            //     claveEmpresa: req.query.EMP_CLV_EMPRESA,
-                            //     typeCon: req.query.Type,
-                            //     username: req.query.USU_LOGIN
-                            // };
-                            // const token = generarToken(usuario);
-                            ResultData = { success: true, message: 'Success Data Get', count: resultReturn.length, JsonData: resultReturn };
-                            res.status(200);
-                            res.send(ResultData);
-                        }
-                    }
-                });
+        const query = `
+            SELECT EMP_CSC_EMPRESA_HOST, USU_CSC_USUARIO, EMPLEADO_CSC_EMPLEADO,
+                   USU_INDICAACTIVO, USU_CSCSYSUSER, USU_LOGIN, USU_CODESQUEMASEG,
+                   USU_FECHA_EXPIRA, USU_AUTENTIFICA_REMOTO, NEWID,
+                   USU_ACCESO_SITEMA, USU_FECHA_EXPIRA_LOGIN
+            FROM SAMT_USUARIO
+            WHERE USU_LOGIN = ?
+              AND USU_PASSWORD = ?
+              AND EMP_CSC_EMPRESA_HOST = ?
+              AND USU_INDICAACTIVO = 1;
+        `;
 
+        __Request_Pool.query(query, inputData, function (error, resultReturn, fields) {
+            if (error) {
+                const ResultData = { success: false, message: error.message };
+                res.status(400).send(ResultData);
+                console.log("Error en query:", ResultData);
+                return;
+            }
+
+            if (resultReturn.length === 0) {
+                const ResultData = { success: false, message: 'No Data Get' };
+                res.status(200).send(ResultData);
+            } else {
+                const ResultData = {
+                    success: true,
+                    message: 'Success Data Get',
+                    count: resultReturn.length,
+                    JsonData: resultReturn
+                };
+                res.status(200).send(ResultData);
             }
         });
+
+    } catch (error) {
+        const ResultData = { success: false, message: error.message };
+        res.status(500).send(ResultData);
+        console.log("Catch general:", error);
     }
-    catch (error) {
-        ResultData = { success: false, message: error.message };
-        res.status(500);
-        res.send(ResultData);
-        console.log(error);
-    }
-}
+};
 
 exports.Get_Info_Empleado = async (req, res) => {
     try {
