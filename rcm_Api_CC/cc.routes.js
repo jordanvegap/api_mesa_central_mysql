@@ -1,0 +1,15 @@
+const { Router } = require('express');
+const express = require('express');
+const router = express.Router();
+const authToken = require('../__utilitis/authToken');
+const ControllerApi = require("./cc.controller");
+router.get("/Get_Date", [authToken.verifyToken], ControllerApi.Get_Date);
+router.get("/Get_IdPerido_PagoDefault", [authToken.verifyToken], ControllerApi.Get_IdPerido_PagoDefault);
+router.get("/Get_IdPerido_PagoEmpleados", [authToken.verifyToken], ControllerApi.Get_IdPerido_PagoEmpleados);
+router.get("/Get_CatPeriodoPago", [authToken.verifyToken], ControllerApi.Get_CatPeriodoPago);
+router.get("/Get_Solicitudes_Operativas", [authToken.verifyToken], ControllerApi.Get_Solicitudes_Operativas);
+router.get("/Get_Permisos_Solicitudes", [authToken.verifyToken], ControllerApi.Get_Permisos_Solicitudes);
+router.get("/Get_Personal_Supervisor", [authToken.verifyToken], ControllerApi.Get_Personal_Supervisor);
+router.get("/Get_Requisicion_Inmueble", [authToken.verifyToken], ControllerApi.Get_Requisicion_Inmueble);
+router.get("/Get_Programa_Trabajo", [authToken.verifyToken], ControllerApi.Get_Programa_Trabajo);
+module.exports = router;

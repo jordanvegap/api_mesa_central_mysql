@@ -1,0 +1,33 @@
+const { Router } = require('express');
+const express = require('express');
+const router = express.Router();
+const authToken = require('../__utilitis/authToken');
+const ControllerApi = require("./ots.controller");
+
+router.get("/Get_Orden_Trabajo", [authToken.verifyToken], ControllerApi.Get_Orden_Trabajo);
+router.get("/Get_Vista_Orden_Trabajo", [authToken.verifyToken], ControllerApi.Get_Vista_Orden_Trabajo);
+router.post("/Insert_Orden_Trabajo", [authToken.verifyToken], ControllerApi.Insert_Orden_Trabajo);
+router.post("/Update_Orden_Trabajo", [authToken.verifyToken], ControllerApi.Update_Orden_Trabajo);
+router.post("/Insert_Bitacora_Ot", [authToken.verifyToken], ControllerApi.Insert_Bitacora_Ot);
+router.get("/Get_Ot_Bitacora", [authToken.verifyToken], ControllerApi.Get_Ot_Bitacora);
+router.post("/Insert_Inter_Ot_Ticket", [authToken.verifyToken], ControllerApi.Insert_Inter_Ot_Ticket);
+router.get("/Get_Ot_Conteo_Empleado", [authToken.verifyToken], ControllerApi.Get_Ot_Conteo_Empleado);
+router.get("/Get_Linkeo_ticket_ot", [authToken.verifyToken], ControllerApi.Get_Linkeo_ticket_ot);
+router.get("/Get_Activos_Fijos_ot",[authToken.verifyToken],ControllerApi.Get_Activos_Fijos_ot);
+router.post("/Insert_Ot_Equipos",[authToken.verifyToken],ControllerApi.Insert_Ot_Equipos);
+router.get("/Get_Buscar_Equipos",[authToken.verifyToken],ControllerApi.Get_Buscar_Equipos);
+router.post("/Inactivar_Ot_Equipos",[authToken.verifyToken],ControllerApi.Inactivar_Ot_Equipos);
+router.get("/Get_Tareas_Ot",[authToken.verifyToken],ControllerApi.Get_Tareas_Ot);
+router.post("/Insert_Tareas_Ot", [authToken.verifyToken], ControllerApi.Insert_Tareas_Ot);
+router.post("/Update_Tareas_Ot", [authToken.verifyToken], ControllerApi.Update_Tareas_Ot);
+router.get("/Get_Autorizaciones_Ot",[authToken.verifyToken],ControllerApi.Get_Autorizaciones_Ot);
+router.post("/Insert_Autorizaciones_Ot", [authToken.verifyToken], ControllerApi.Insert_Autorizaciones_Ot);
+router.post("/Update_Autorizaciones_Ot", [authToken.verifyToken], ControllerApi.Update_Autorizaciones_Ot);
+router.get("/Get_Insumos_Ot",[authToken.verifyToken],ControllerApi.Get_Insumos_Ot);
+router.get("/Get_Buscar_Insumos",[authToken.verifyToken],ControllerApi.Get_Buscar_Insumos);
+router.post("/Insert_Insumos_Ot", [authToken.verifyToken], ControllerApi.Insert_Insumos_Ot);
+router.post("/Update_Insumos_Ot", [authToken.verifyToken], ControllerApi.Update_Insumos_Ot);
+router.post("/Insert_Inventario_Salida", [authToken.verifyToken], ControllerApi.Insert_Inventario_Salida);
+router.post("/Delete_Insumos_Ot", [authToken.verifyToken], ControllerApi.Delete_Insumos_Ot);
+
+module.exports = router;
